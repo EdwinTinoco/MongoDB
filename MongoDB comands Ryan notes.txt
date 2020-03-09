@@ -1,0 +1,206 @@
+Mongo DB Notes
+
+Start the mongo demon
+- mongod 
+
+Open new terminal window and open up mongo shell
+- mongo 
+
+To see all databases you have:
+- show dbs 
+
+To create new database:
+- Use dbName 
+- Will automatically switch to that database
+- Just creating the database will not put it on the show dbs list 
+
+To reference current database
+db 
+
+To create a user: 
+db.createUser({
+  user: 'victor',
+  pwd: 'password',
+  customData: { startDate: new Date() },
+  roles: [
+    { role: 'clusterAdmin', db: 'admin' },
+    { role: 'readAnyDatabase', db: 'admin' },
+    'readWrite'
+  ]
+})
+
+- Write the code in a text file 
+- Paste code into mongo shell
+
+To see all of the users
+- Inside the mongo shell type
+db.getUsers()
+
+To drop a user:
+db.dropUser(‘userName’)
+
+To create a collection
+db.createCollection(‘collectionName’)
+Returns { ‘ok’: 1 }
+
+To see all collections 
+Show collections 
+
+How to insert documents into db:
+db.books.insert({
+  "name": "OOP Programming",
+  "publishedDate": new Date(),
+  "authors": [
+    { "name": "Jon Snow" },
+    { "name": "Ned Stark" }
+  ]
+})
+
+- The method .insert() takes an object as an argument 
+
+// Super close to writing straight javascript
+db.collectionName.insert({})
+
+NOTE: there is no schema what so ever
+- Each document can be as unique as it needs to be
+- Mongo does not care about your data or about the structure. Allows you to store these objects
+- Note: if you go crazy with the flexibility you’re going to have a bad time when querying data
+
+
+How to insert multiple documents into db:
+- Write this script in a text editor 
+db.books.insertMany([
+  {
+    "name": "Confident Ruby",
+    "publishedDate": new Date(),
+    "authors": [
+      { "name": "Avdi Grimm" }
+    ]
+  },
+  {
+    "name": "The War of Art",
+    "publishedDate": new Date(),
+    "authors": [
+      {"name": "Steven Pressfield"}
+    ]
+  },
+  {
+    "name": "Blink",
+    "publishedDate": new Date(),
+    "authors": [
+      {"name": "Malcolm Gladwell"}
+    ]
+  }
+])
+
+- The function .insertMany() takes in an array as an argument
+- Will acknowledge and give ids to all the objects you passed in
+
+
+How to query all documents:
+db.books.find().pretty()
+db.collectionName.find().pretty()
+Equivalent to select * from tableName
+- .pretty() will format your data to make it look pretty
+- _id is something that is auto generated to mongo. Similar to a primary key in sql 
+
+How to query specific documents
+db.books.find({ name: "The War of Art"}).pretty()
+db.collectionName.find({ specific object with attributes you want }).pretty()
+- .find() takes in an object with the specific attributes you’re looking for
+
+Equivalent to select * from books where name = “The War of Art”
+
+Working with Projections
+- Projections are various constraints that we can put on our query so that we can ensure that we're only getting back the elements that we actually want
+db.books.find(
+  {
+    name: "Confident Ruby"
+  },
+  {
+    authors: 1,
+    name: 1,
+    _id: 0
+  }
+).pretty()
+- The first object is what you’re specifically looking for, the second object is the attributes you want to be returned
+- If you don’t want a specific attribute returned don’t type it into the second object
+- The 1 states you want it returned and the 0 means you don’t want it
+- You only pass in a 0 to a default attribute, otherwise you shouldn’t have it in the object
+
+Equivalent to SELECT name, authors FROM books WHERE name = “Confident Ruby”
+
+
+Query a portion of nested array element using $slice 
+db.books.find(
+  {
+    name: "Blink" 
+  },
+  {
+    publishedDate: 1,
+    name: 1,
+    authors: { $slice: -1 }
+  }
+).pretty()
+
+- Remember that authors is an array
+- Because of that you can work with the $slice function
+- Pass in $slice as an object. Working with slice is just like working with an array. Pass in the index of the element you’re selecting
+
+How to delete documents
+db.books.remove({name: "OOP Programming"}, 2)
+- The number you pass in is how many entrees you want to delete
+- If you don’t pass in a number it will delete all of the entries
+
+Include Nested Fields in a find Query
+- We want to return authors without active: true
+"authors" : [
+		{
+			"name" : "Malcolm Gladwell",
+			"active" : "true"
+		}
+
+- How to setup your query
+db.books.find(
+  {
+    name: "Blink"   
+  },
+  {
+    name: 1,
+    publishedDate: 1,
+    "authors.name": 1
+  }
+).pretty()
+
+- Note that “authors.name” needs to be in quotes
+- Authors were inputed in as an object with multiple attributes
+- You can call whatever attribute you want by calling Object.attribute in quotes
+
+
+How to count the number of documents in db
+db.books.find({name: "Blink"}).length()
+- .length() will return the number of entries in db
+
+How to query a single document 
+db.books.findOne({name: "Blink"})
+
+- The .findOne() method is what does that magic
+- There is no need to add the .pretty() function
+
+
+Query for a Portion of a String 
+db.books.findOne({ name: /.*deep work.*/i })
+db.collectionName.findOne({ attribute: /.*string I want to find.*/i })
+
+- Use the .findOne() method to return a single entry
+- Notice the regex you’re passing into the object /.* .*/i
+- The .* .* searches for the content regardless of the position 
+- The i makes it case insensitive 
+
+
+Check if a field exists:
+db.books.find({ reviews: { $exists: true }}).pretty()
+- We’re checking to see if the attribute reviews exists within books
+- The attribute we’re looking for (reviews) takes in an object with the function $exists set to true
+- If $exists is set to true it will return every book that has the attribute of reviews
+- If $exists is set to false it will return every book that does not have the attribute of reviews
