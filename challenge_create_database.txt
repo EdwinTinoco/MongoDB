@@ -1,0 +1,100 @@
+ Create a new Mongo Database
+- Load 6 documents into a collection all at once
+- Show how to delete the 3rd, and 5th documents, only leaving 4 left.
+
+
+1. Open a new terminal DOS and write: mongo
+2. Create a Database: 
+    use shoes_store
+
+3. Reference to the database:
+    db 
+
+4. Create a admin user
+db.createUser({
+  user: 'Edwin',
+  pwd: 'password',
+  customData: { startDate: new Date() },
+  roles: [
+    { role: 'clusterAdmin', db: 'admin' },
+    { role: 'readAnyDatabase', db: 'admin' },
+    'readWrite'
+  ]
+})
+
+5. Create a collection:
+    db.createCollection('shoes')
+    show collections
+
+6. Insert a few documents in the shoes collections
+db.shoes.insertMany([
+  {
+    "style": "running shoes",
+    "brand": "nike",
+    "description": "runner sx",
+    "model" : "2020"    
+  },
+  {
+    "style": "basketball shoes",
+    "brand": "MJ23",
+    "description": "Air Jordan XI",
+    "model" : "1996"
+    
+  },
+  {
+    "style": "basketball shoes",
+    "brand": "nike",
+    "description": "Lebron James",
+    "model" : "2018"
+    
+  },
+  {
+    "style": "basketball shoes",
+    "brand": "Under Armor",
+    "description": "Stephen Curry",
+    "model" : "2015"
+    
+  },
+  {
+    "style": "golf shoes",
+    "brand": "nike",
+    "description": "Tyger Woods",
+    "model" : "2019"
+    
+  },
+  {
+    "style": "running shoes",
+    "brand": "nike",
+    "description": "runner sx",
+    "model" : "2020"
+    
+  },
+  {
+    "style": "basketball shoes",
+    "brand": "MJ23",
+    "description": "Air Jordan XI",
+    "model" : "1996"
+    
+  },
+  {
+    "style": "basketball shoes",
+    "brand": "nike",
+    "description": "Lebron James",
+    "model" : "2018"
+    
+  },
+   {
+    "style": "basketball shoes",
+    "brand": "Under Armor",
+    "description": "Stephen Curry",
+    "model" : "2015"
+    
+  },
+  {
+    "style": "soccer shoes",
+    "brand": "nike",
+    "description": "Leo Messi",
+    "model" : "2020"
+    
+  }  
+])
