@@ -34,7 +34,7 @@ db.books.insert({
   ]
 })
 
-- Sirve para buscar varios documentos en una colleccion
+- Sirve para insertar varios documentos en una colleccion
 db.books.insertMany([
   {
     "name": "Confident Ruby",

@@ -68,33 +68,6 @@ db.shoes.insertMany([
     "description": "runner sx",
     "model" : "2020"
     
-  },
-  {
-    "style": "basketball shoes",
-    "brand": "MJ23",
-    "description": "Air Jordan XI",
-    "model" : "1996"
-    
-  },
-  {
-    "style": "basketball shoes",
-    "brand": "nike",
-    "description": "Lebron James",
-    "model" : "2018"
-    
-  },
-   {
-    "style": "basketball shoes",
-    "brand": "Under Armor",
-    "description": "Stephen Curry",
-    "model" : "2015"
-    
-  },
-  {
-    "style": "soccer shoes",
-    "brand": "nike",
-    "description": "Leo Messi",
-    "model" : "2020"
-    
-  }  
+  }
+  
 ])
